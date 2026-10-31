@@ -1,4 +1,5 @@
 package lk.g41.vehicleparkingmanagementsystem.controller;
 
 public class PaymentController {
+    int sajani;
 }
