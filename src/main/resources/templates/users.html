@@ -1,10 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Parkwise | Vehicle Parking Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
+<div th:replace="~{fragments :: sidebar('users')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+
+    <!-- Page heading -->
+    <div class="page-head">
+
+        <div>
+            <div class="eyebrow-blue">ACCESS</div>
+
+            <h1>User management</h1>
+
+            <p>Manage staff and system user accounts.</p>
+        </div>
+
+        <a class="btn" th:href="@{/users/add}">
+            ＋ Add user
+        </a>
+
+    </div>
+
+    <!-- System users -->
+    <div class="panel">
+
+        <div class="panel-head">
+
+            <div>
+                <h2>System users</h2>
+
+                <p th:text="${#lists.size(users)} + ' accounts'"></p>
+            </div>
+
+            <input
+                    class="search"
+                    id="tableSearch"
+                    placeholder="Search users…"
+                    oninput="filterTable()">
+
+        </div>
+
+        <div class="table-wrap">
+
+            <table id="dataTable">
+
+                <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Full name</th>
+                    <th>Contact</th>
+                    <th>Username</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr th:each="u : ${users}">
+
+                    <td th:text="${u.userId}"></td>
+
+                    <td>
+                        <strong th:text="${u.name}"></strong>
+                    </td>
+
+                    <td th:text="${u.contactNumber}"></td>
+
+                    <td th:text="${u.username}"></td>
+
+                    <td>
+                        <div class="action-links">
+
+                            <a
+                                    class="action-link"
+                                    th:href="@{/users/edit(userId=${u.userId})}">
+                                Edit
+                            </a>
+
+                            <form
+                                    class="inline-form"
+                                    th:action="@{/users/delete}"
+                                    method="post">
+
+                                <input
+                                        type="hidden"
+                                        name="userId"
+                                        th:value="${u.userId}">
+
+                                <button
+                                        class="action-link"
+                                        style="border:0;background:none;color:#c2414d;cursor:pointer"
+                                        onclick="return confirm('Delete this user?')">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(users)}">
+                    <td colspan="5" class="empty">
+                        No users added yet.
+                    </td>
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+    <script th:src="@{/js/script.js}"></script>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+
+</main>
 
 </body>
 </html>
+
+//test
