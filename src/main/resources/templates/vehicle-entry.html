@@ -1,10 +1,92 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Parkwise | Vehicle Parking Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
+<div th:replace="~{fragments :: sidebar('entry')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+
+    <!-- Page heading -->
+    <div class="page-head">
+
+        <div>
+            <div class="eyebrow-blue">VEHICLE FLOW</div>
+
+            <h1>Register vehicle entry</h1>
+
+            <p>Start a new parking session.</p>
+        </div>
+
+        <a class="btn secondary" th:href="@{/entry-exit}">
+            ← Back
+        </a>
+
+    </div>
+
+    <!-- Vehicle entry form -->
+    <div class="form-card">
+
+        <div
+                th:if="${error}"
+                class="alert"
+                th:text="${error}">
+        </div>
+
+        <form th:action="@{/entry-exit/entry}" method="post">
+
+            <div class="form-grid">
+
+                <div class="field full">
+
+                    <label>Vehicle number *</label>
+
+                    <input
+                            name="vehicleNumber"
+                            th:value="${vehicleNumber}"
+                            required
+                            placeholder="e.g. ABC-1234">
+
+                    <small>
+                        Do not enter a vehicle that already has an active session.
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+
+                <button class="btn success" type="submit">
+                    Register entry
+                </button>
+
+                <a class="btn secondary" th:href="@{/entry-exit}">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+
+</main>
 
 </body>
 </html>
