@@ -1,10 +1,114 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Parkwise | Vehicle Parking Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
+<div th:replace="~{fragments :: sidebar('entry')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+
+    <div class="page-head">
+        <div>
+            <div class="eyebrow-blue">VEHICLE FLOW</div>
+            <h1>Entry &amp; exit</h1>
+            <p>Track active parking sessions and completed visits.</p>
+        </div>
+
+        <a class="btn" th:href="@{/entry-exit/entry}">
+            ＋ Record entry
+        </a>
+    </div>
+
+    <div class="panel">
+
+        <div class="panel-head">
+            <div>
+                <h2>Parking sessions</h2>
+                <p>View current parking sessions and completed visits.</p>
+            </div>
+
+            <a class="btn secondary"
+               th:href="@{/entry-exit/exit}">
+                Record exit by vehicle number
+            </a>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Record ID</th>
+                    <th>Vehicle number</th>
+                    <th>Entry time</th>
+                    <th>Exit time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="r : ${records}">
+
+                    <td th:text="${r.recordId}"></td>
+
+                    <td>
+                        <strong th:text="${r.vehicleNumber}"></strong>
+                    </td>
+
+                    <td th:text="${r.entryTime}"></td>
+
+                    <td th:text="${#strings.isEmpty(r.exitTime)
+                                  ? '—' : r.exitTime}">
+                    </td>
+
+                    <td>
+                        <span class="badge"
+                              th:classappend="${r.status == 'Parked'}
+                                              ? ' green' : ' red'"
+                              th:text="${r.status}">
+                        </span>
+                    </td>
+
+                    <td>
+                        <a class="action-link"
+                           th:if="${r.status == 'Parked'}"
+                           th:href="@{/entry-exit/exit}">
+                            Record exit →
+                        </a>
+
+                        <span th:if="${r.status == 'Exited'}"
+                              class="badge">
+                            Completed
+                        </span>
+                    </td>
+
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(records)}">
+                    <td colspan="6" class="empty">
+                        No vehicle entries yet.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+
+</main>
 
 </body>
 </html>
