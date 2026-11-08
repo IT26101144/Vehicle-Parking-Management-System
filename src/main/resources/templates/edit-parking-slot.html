@@ -1,10 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Parkwise | Vehicle Parking Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
+<div th:replace="~{fragments :: sidebar('slots')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+
+    <!-- Page heading -->
+    <div class="page-head">
+
+        <div>
+            <div class="eyebrow-blue">FACILITY</div>
+
+            <h1>Edit parking slot</h1>
+
+            <p>Update the slot category.</p>
+        </div>
+
+        <a class="btn secondary" th:href="@{/parking-slots}">
+            ← Back
+        </a>
+
+    </div>
+
+    <!-- Edit parking slot form -->
+    <div class="form-card">
+
+        <div
+                th:if="${error}"
+                class="alert"
+                th:text="${error}">
+        </div>
+
+        <form
+                th:action="@{/parking-slots/edit}"
+                th:object="${slot}"
+                method="post">
+
+            <div class="form-grid">
+
+                <div class="field">
+
+                    <label>Slot ID</label>
+
+                    <input
+                            th:field="*{slotId}"
+                            readonly>
+
+                </div>
+
+                <div class="field">
+
+                    <label>Slot type *</label>
+
+                    <select
+                            th:field="*{slotType}"
+                            required>
+
+                        <option value="Car">Car</option>
+                        <option value="Van">Van</option>
+                        <option value="Motorbike">Motorbike</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <p class="stat-note">
+                Status and allocated vehicle are maintained by the system.
+            </p>
+
+            <!-- Form actions -->
+            <div class="form-actions">
+
+                <button class="btn" type="submit">
+                    Save changes
+                </button>
+
+                <a class="btn secondary" th:href="@{/parking-slots}">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+
+</main>
 
 </body>
 </html>
+
+<!--Dilshan update HTML 002-->
