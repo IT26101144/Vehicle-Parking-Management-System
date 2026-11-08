@@ -1,10 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Parkwise | Vehicle Parking Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
+<div th:replace="~{fragments :: sidebar('users')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+
+    <!-- Page heading -->
+    <div class="page-head">
+
+        <div>
+            <div class="eyebrow-blue">ACCESS</div>
+
+            <h1>Edit user</h1>
+
+            <p>Update user details.</p>
+        </div>
+
+        <a class="btn secondary" th:href="@{/users}">
+            ← Back
+        </a>
+
+    </div>
+
+    <!-- Edit user form -->
+    <div class="form-card">
+
+        <div
+                th:if="${error}"
+                class="alert"
+                th:text="${error}">
+        </div>
+
+        <form
+                th:action="@{/users/edit}"
+                th:object="${user}"
+                method="post">
+
+            <div class="form-grid">
+
+                <div class="field">
+
+                    <label>User ID</label>
+
+                    <input
+                            th:field="*{userId}"
+                            readonly>
+
+                </div>
+
+                <div class="field">
+
+                    <label>Full name *</label>
+
+                    <input
+                            th:field="*{name}"
+                            required>
+
+                </div>
+
+                <div class="field">
+
+                    <label>Contact number *</label>
+
+                    <input
+                            th:field="*{contactNumber}"
+                            required>
+
+                </div>
+
+                <div class="field">
+
+                    <label>Username *</label>
+
+                    <input
+                            th:field="*{username}"
+                            required>
+
+                </div>
+
+                <div class="field full">
+
+                    <label>Password *</label>
+
+                    <input
+                            type="password"
+                            th:field="*{password}"
+                            required>
+
+                    <small>
+                        Use dummy credentials for this coursework project.
+                    </small>
+
+                </div>
+
+            </div>
+
+            <!-- Form actions -->
+            <div class="form-actions">
+
+                <button class="btn" type="submit">
+                    Save changes
+                </button>
+
+                <a class="btn secondary" th:href="@{/users}">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+
+</main>
 
 </body>
 </html>

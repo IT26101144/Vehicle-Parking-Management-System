@@ -1,10 +1,99 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Parkwise | Record Vehicle Exit</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
+<div th:replace="~{fragments :: sidebar('entry')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+
+    <div class="page-head">
+        <div>
+            <div class="eyebrow-blue">VEHICLE FLOW</div>
+            <h1>Record vehicle exit</h1>
+            <p>Select the registration number of a currently parked vehicle.</p>
+        </div>
+
+        <a class="btn secondary" th:href="@{/entry-exit}">
+            ← Back
+        </a>
+    </div>
+
+    <div class="form-card">
+
+        <div th:if="${error}"
+             class="alert"
+             th:text="${error}">
+        </div>
+
+        <form th:action="@{/entry-exit/exit}" method="post">
+
+            <div class="form-grid">
+
+                <div class="field full">
+                    <label for="vehicleNumber">Vehicle number *</label>
+
+                    <select id="vehicleNumber"
+                            name="vehicleNumber"
+                            required
+                            th:disabled="${#lists.isEmpty(activeRecords)}">
+
+                        <option value="">Choose a parked vehicle</option>
+
+                        <option th:each="r : ${activeRecords}"
+                                th:value="${r.vehicleNumber}"
+                                th:selected="${vehicleNumber != null
+                                    and vehicleNumber.equalsIgnoreCase(r.vehicleNumber)}"
+                                th:text="${r.vehicleNumber
+                                    + ' | Entry: ' + r.entryTime}">
+                        </option>
+
+                    </select>
+
+                    <small>
+                        Only vehicles with an active parking session appear here.
+                    </small>
+                </div>
+
+            </div>
+
+            <div th:if="${#lists.isEmpty(activeRecords)}"
+                 class="alert">
+                No vehicles are currently parked.
+            </div>
+
+            <div class="form-actions">
+                <button class="btn"
+                        type="submit"
+                        th:disabled="${#lists.isEmpty(activeRecords)}">
+                    Record exit
+                </button>
+
+                <a class="btn secondary"
+                   th:href="@{/entry-exit}">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+
+</main>
 
 </body>
 </html>
