@@ -1,10 +1,67 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Parkwise | Vehicle Parking Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
+<div th:replace="~{fragments :: sidebar('payments')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+    <div class="page-head">
+        <div>
+            <div class="eyebrow-blue">REVENUE</div>
+            <h1>Payment details</h1>
+            <p>Review the selected transaction.</p>
+        </div>
+
+        <a class="btn secondary" th:href="@{/payments}">
+            ← Back
+        </a>
+    </div>
+
+    <div class="panel">
+        <div class="detail-grid">
+            <div class="detail">
+                <small>Payment ID</small>
+                <strong th:text="${payment.paymentId}"></strong>
+            </div>
+
+            <div class="detail">
+                <small>Vehicle number</small>
+                <strong th:text="${payment.vehicleNumber}"></strong>
+            </div>
+
+            <div class="detail">
+                <small>Duration</small>
+                <strong th:text="${payment.durationHours} + ' hours'"></strong>
+            </div>
+
+            <div class="detail">
+                <small>Fee</small>
+                <strong th:text="'Rs. ' + ${payment.fee}"></strong>
+            </div>
+
+            <div class="detail">
+                <small>Payment method</small>
+                <strong th:text="${payment.paymentMethod}"></strong>
+            </div>
+
+            <div class="detail">
+                <small>Payment time</small>
+                <strong th:text="${payment.paymentTime}"></strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+</main>
 </body>
 </html>
