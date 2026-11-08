@@ -1,10 +1,86 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Parkwise | Record Payment</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
+<div th:replace="~{fragments :: sidebar('payments')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+    <div class="page-head">
+        <div>
+            <div class="eyebrow-blue">REVENUE</div>
+            <h1>Record payment</h1>
+            <p>Select a completed parking session to calculate its fee.</p>
+        </div>
+        <a class="btn secondary" th:href="@{/payments}">← Back</a>
+    </div>
+
+    <div class="form-card">
+        <div th:if="${error}" class="alert" th:text="${error}"></div>
+
+        <form th:action="@{/payments/add}" method="post">
+            <div class="form-grid">
+                <div class="field full">
+                    <label for="recordId">Unpaid parking session *</label>
+
+                    <select id="recordId" name="recordId" required
+                            th:disabled="${#lists.isEmpty(unpaidRecords)}">
+                        <option value="">Choose a vehicle session</option>
+
+                        <option th:each="record : ${unpaidRecords}"
+                                th:value="${record.recordId}"
+                                th:text="${record.vehicleNumber + ' | Entry: ' + record.entryTime + ' | Exit: ' + record.exitTime}">
+                        </option>
+                    </select>
+
+                    <small>
+                        Only exited vehicles without a recorded payment
+                        should appear here.
+                    </small>
+                </div>
+
+                <div class="field full">
+                    <label for="paymentMethod">Payment method *</label>
+
+                    <select id="paymentMethod" name="paymentMethod" required>
+                        <option value="">Choose method</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Card">Card</option>
+                        <option value="Online">Online</option>
+                    </select>
+
+                    <small>
+                        Tariff: Rs. 100 for the first hour, then Rs. 30
+                        for every additional hour or part thereof.
+                    </small>
+                </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(unpaidRecords)}" class="alert">
+                No unpaid exited parking sessions are available.
+            </div>
+
+            <div class="form-actions">
+                <button class="btn success" type="submit"
+                        th:disabled="${#lists.isEmpty(unpaidRecords)}">
+                    Save payment
+                </button>
+
+                <a class="btn secondary" th:href="@{/payments}">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+</main>
 </body>
 </html>
