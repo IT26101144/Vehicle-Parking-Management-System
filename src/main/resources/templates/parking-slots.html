@@ -1,10 +1,149 @@
+```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Parkwise | Vehicle Parking Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
+<div th:replace="~{fragments :: sidebar('slots')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+
+    <!-- Page heading -->
+    <div class="page-head">
+        <div>
+            <div class="eyebrow-blue">FACILITY</div>
+            <h1>Parking slots</h1>
+            <p>Monitor parking availability and currently parked vehicles.</p>
+        </div>
+
+        <a class="btn" th:href="@{/parking-slots/add}">
+            ＋ Add slot
+        </a>
+    </div>
+
+    <!-- Slot statistics -->
+    <div class="stats">
+
+        <div class="stat-card">
+            <div class="stat-icon">▤</div>
+            <div>
+                <div class="stat-label">Total slots</div>
+                <div class="stat-value"
+                     th:text="${#lists.size(slots)}">0</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon green">✓</div>
+            <div>
+                <div class="stat-label">Available</div>
+                <div class="stat-value" th:text="${available}">0</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon amber">◉</div>
+            <div>
+                <div class="stat-label">Occupied</div>
+                <div class="stat-value" th:text="${occupied}">0</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Status message -->
+    <div th:if="${message}"
+         class="alert"
+         style="background:#e3f8ed;color:#16865a"
+         th:text="${message}">
+    </div>
+
+    <!-- Parking slot map -->
+    <div class="panel">
+
+        <div class="panel-head">
+            <div>
+                <h2>Slot map</h2>
+                <p>Green slots are available; red slots are occupied.</p>
+            </div>
+        </div>
+
+        <div class="slot-grid">
+
+            <div th:each="s : ${slots}"
+                 class="slot-card"
+                 th:classappend="${s.status == 'Occupied'} ? ' occupied'">
+
+                <div th:text="${s.slotType == 'Motorbike' ? '🏍' : '🚘'}">
+                    🚘
+                </div>
+
+                <strong th:text="${s.slotId}">A01</strong>
+
+                <span th:text="${s.status}">Available</span>
+
+                <small style="display:block;margin-top:5px"
+                       th:text="${s.vehicleNumber == null or #strings.isEmpty(s.vehicleNumber) ? 'No vehicle' : s.vehicleNumber}">
+                    No vehicle
+                </small>
+
+                <div class="slot-actions">
+
+                    <!-- Edit slot -->
+                    <a class="action-link"
+                       th:href="@{/parking-slots/edit(slotId=${s.slotId})}">
+                        Edit slot
+                    </a>
+
+                    <!-- Delete slot -->
+                    <form th:action="@{/parking-slots/delete}"
+                          method="post">
+
+                        <input type="hidden"
+                               name="slotId"
+                               th:value="${s.slotId}">
+
+                        <button class="btn danger"
+                                style="width:100%;padding:8px"
+                                type="submit"
+                                onclick="return confirm('Delete this slot?')">
+                            Delete
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <!-- Empty state -->
+            <div th:if="${#lists.isEmpty(slots)}"
+                 class="empty">
+                No slots created yet. Add your first parking slot.
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+
+</main>
 
 </body>
 </html>
+```
+
+//Dilshan update HTML 001
