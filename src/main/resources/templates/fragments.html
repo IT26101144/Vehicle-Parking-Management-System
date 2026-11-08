@@ -1,10 +1,114 @@
+```html
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+
 <body>
+
+<!-- Sidebar fragment -->
+<aside
+        th:fragment="sidebar(active)"
+        class="sidebar">
+
+    <a class="brand" th:href="@{/}">
+
+        <span class="brand-mark">P</span>
+
+        <span>
+            Parkwise
+            <small>Management System</small>
+        </span>
+
+    </a>
+
+    <!-- Navigation menu -->
+    <nav>
+
+        <a
+                th:classappend="${active == 'dashboard'} ? ' active'"
+                th:href="@{/}">
+            ▦
+            <span>Dashboard</span>
+        </a>
+
+        <a
+                th:classappend="${active == 'vehicles'} ? ' active'"
+                th:href="@{/vehicles}">
+            ▣
+            <span>Vehicles</span>
+        </a>
+
+        <!-- Entry & Exit moved above Parking Slots -->
+        <a
+                th:classappend="${active == 'entry'} ? ' active'"
+                th:href="@{/entry-exit}">
+            ↔
+            <span>Entry &amp; Exit</span>
+        </a>
+
+        <a
+                th:classappend="${active == 'slots'} ? ' active'"
+                th:href="@{/parking-slots}">
+            ▤
+            <span>Parking Slots</span>
+        </a>
+
+        <a
+                th:classappend="${active == 'payments'} ? ' active'"
+                th:href="@{/payments}">
+            ＄
+            <span>Payments</span>
+        </a>
+
+        <a
+                th:classappend="${active == 'reports'} ? ' active'"
+                th:href="@{/parking-reports}">
+            ▥
+            <span>Reports</span>
+        </a>
+
+        <a
+                th:classappend="${active == 'users'} ? ' active'"
+                th:href="@{/users}">
+            ♙
+            <span>User Management</span>
+        </a>
+
+    </nav>
+
+    <!-- Sidebar footer -->
+    <div class="sidebar-bottom">
+        <span class="status-dot"></span>
+        File-based storage active
+    </div>
+
+</aside>
+
+<!-- Topbar fragment -->
+<header
+        th:fragment="topbar"
+        class="topbar">
+
+    <div>
+        <span class="eyebrow">PARKING OPERATIONS</span>
+
+        <span class="top-title">
+            Management Console
+        </span>
+    </div>
+
+    <div class="profile">
+
+        <span class="avatar">A</span>
+
+        <span>
+            Administrator
+            <small>System Admin</small>
+        </span>
+
+    </div>
+
+</header>
 
 </body>
 </html>
+```
