@@ -1,10 +1,217 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Parkwise | Vehicle Parking Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
+<div th:replace="~{fragments :: sidebar('dashboard')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+
+    <!-- Dashboard heading -->
+    <div class="page-head">
+
+        <div>
+            <div class="eyebrow-blue">OVERVIEW</div>
+
+            <h1>Good day, Admin 👋</h1>
+
+            <p>
+                Here's what's happening in your parking facility today.
+            </p>
+        </div>
+
+        <a class="btn" th:href="@{/entry-exit/entry}">
+            ＋ Register vehicle entry
+        </a>
+
+    </div>
+
+    <!-- Dashboard statistics -->
+    <div class="stats">
+
+        <div class="stat-card">
+            <div class="stat-icon">▣</div>
+
+            <div>
+                <div class="stat-label">Registered vehicles</div>
+
+                <div class="stat-value" th:text="${vehicleCount}">
+                    0
+                </div>
+
+                <div class="stat-note">
+                    In vehicle directory
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon green">▤</div>
+
+            <div>
+                <div class="stat-label">Available slots</div>
+
+                <div class="stat-value" th:text="${availableCount}">
+                    0
+                </div>
+
+                <div class="stat-note">
+                    Ready for allocation
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon amber">◉</div>
+
+            <div>
+                <div class="stat-label">Currently parked</div>
+
+                <div class="stat-value" th:text="${parkedCount}">
+                    0
+                </div>
+
+                <div class="stat-note">
+                    Active parking sessions
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon purple">＄</div>
+
+            <div>
+                <div class="stat-label">Payments recorded</div>
+
+                <div class="stat-value"
+                     th:text="'Rs. ' + ${paymentTotal}">
+                    Rs. 0
+                </div>
+
+                <div class="stat-note">
+                    Total recorded fees
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Quick actions -->
+    <div class="panel">
+
+        <div class="panel-head">
+            <div>
+                <h2>Quick actions</h2>
+                <p>Jump into a common task</p>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+
+            <a class="btn" th:href="@{/vehicles/add}">
+                ＋ Add vehicle
+            </a>
+
+            <a class="btn secondary" th:href="@{/parking-slots/add}">
+                ＋ Add parking slot
+            </a>
+
+            <a class="btn secondary" th:href="@{/payments/add}">
+                ＋ Record payment
+            </a>
+
+            <a class="btn secondary" th:href="@{/parking-reports}">
+                View reports →
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Recent vehicle activity -->
+    <div class="panel">
+
+        <div class="panel-head">
+
+            <div>
+                <h2>Recent vehicle activity</h2>
+                <p>Latest entry records</p>
+            </div>
+
+            <a class="action-link" th:href="@{/entry-exit}">
+                View all →
+            </a>
+
+        </div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+                <tr>
+                    <th>Record ID</th>
+                    <th>Vehicle number</th>
+                    <th>Entry time</th>
+                    <th>Exit time</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr th:each="r : ${recentRecords}">
+
+                    <td th:text="${r.recordId}"></td>
+
+                    <td th:text="${r.vehicleNumber}"></td>
+
+                    <td th:text="${r.entryTime}"></td>
+
+                    <td
+                            th:text="${r.exitTime == '' ? '—' : r.exitTime}">
+                    </td>
+
+                    <td>
+                                <span
+                                        class="badge"
+                                        th:classappend="${r.status == 'Parked'} ? ' green' : ' red'"
+                                        th:text="${r.status}">
+                                </span>
+                    </td>
+
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(recentRecords)}">
+                    <td colspan="5" class="empty">
+                        No activity yet. Register your first vehicle entry.
+                    </td>
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+
+</main>
 
 </body>
 </html>
