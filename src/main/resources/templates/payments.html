@@ -1,10 +1,113 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Parkwise | Vehicle Parking Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
+<div th:replace="~{fragments :: sidebar('payments')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+    <div class="page-head">
+        <div>
+            <div class="eyebrow-blue">REVENUE</div>
+            <h1>Payments</h1>
+            <p>Record parking fees and review payment history.</p>
+        </div>
+        <a class="btn" th:href="@{/payments/add}">＋ Record payment</a>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-icon green">＄</div>
+            <div>
+                <div class="stat-label">Total recorded fees</div>
+                <div class="stat-value" th:text="'Rs. ' + ${totalPayments}"></div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">▤</div>
+            <div>
+                <div class="stat-label">Payment records</div>
+                <div class="stat-value" th:text="${#lists.size(payments)}"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h2>Payment history</h2>
+                <p>Rs. 100 for the first hour, then Rs. 30 per additional hour or part thereof.</p>
+            </div>
+            <input class="search" id="tableSearch"
+                   placeholder="Search payments…"
+                   oninput="filterTable()">
+        </div>
+
+        <div class="table-wrap">
+            <table id="dataTable">
+                <thead>
+                <tr>
+                    <th>Payment ID</th>
+                    <th>Vehicle</th>
+                    <th>Duration</th>
+                    <th>Fee</th>
+                    <th>Method</th>
+                    <th>Paid at</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="p : ${payments}">
+                    <td th:text="${p.paymentId}"></td>
+                    <td th:text="${p.vehicleNumber}"></td>
+                    <td th:text="${p.durationHours} + ' h'"></td>
+                    <td><strong th:text="'Rs. ' + ${p.fee}"></strong></td>
+                    <td th:text="${p.paymentMethod}"></td>
+                    <td th:text="${p.paymentTime}"></td>
+                    <td>
+                        <div class="action-links">
+                            <a class="action-link"
+                               th:href="@{/payments/details(paymentId=${p.paymentId})}">
+                                Details
+                            </a>
+
+                            <form class="inline-form"
+                                  th:action="@{/payments/delete}"
+                                  method="post">
+                                <input type="hidden" name="paymentId"
+                                       th:value="${p.paymentId}">
+                                <button class="action-link"
+                                        style="border:0;background:none;color:#c2414d;cursor:pointer"
+                                        onclick="return confirm('Delete this payment record?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(payments)}">
+                    <td colspan="7" class="empty">No payments recorded yet.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script th:src="@{/js/script.js}"></script>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+</main>
 </body>
 </html>
