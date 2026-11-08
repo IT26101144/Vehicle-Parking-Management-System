@@ -1,0 +1,1 @@
+function filterTable(){const input=document.getElementById('tableSearch');const table=document.getElementById('dataTable');if(!input||!table)return;const q=input.value.toLowerCase();table.querySelectorAll('tbody tr').forEach(row=>{row.style.display=row.innerText.toLowerCase().includes(q)?'':'none';});}
