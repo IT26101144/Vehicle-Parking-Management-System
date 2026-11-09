@@ -1,10 +1,145 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Parkwise | Vehicle Parking Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
+<div th:replace="~{fragments :: sidebar('vehicles')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+
+    <!-- Page heading -->
+    <div class="page-head">
+
+        <div>
+            <div class="eyebrow-blue">DIRECTORY</div>
+
+            <h1>Vehicles</h1>
+
+            <p>Manage registered vehicles and owner information.</p>
+        </div>
+
+        <a class="btn" th:href="@{/vehicles/add}">
+            ＋ Add vehicle
+        </a>
+
+    </div>
+
+    <!-- Vehicle directory -->
+    <div class="panel">
+
+        <div class="panel-head">
+
+            <div>
+                <h2>Vehicle directory</h2>
+
+                <p th:text="${#lists.size(vehicles)} + ' registered vehicles'"></p>
+            </div>
+
+            <input
+                    class="search"
+                    id="tableSearch"
+                    placeholder="Search vehicles…"
+                    oninput="filterTable()">
+
+        </div>
+
+        <div class="table-wrap">
+
+            <table id="dataTable">
+
+                <thead>
+                <tr>
+                    <th>Vehicle ID</th>
+                    <th>Number plate</th>
+                    <th>Type</th>
+                    <th>Owner</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr th:each="v : ${vehicles}">
+
+                    <td th:text="${v.vehicleId}"></td>
+
+                    <td>
+                        <strong th:text="${v.vehicleNumber}"></strong>
+                    </td>
+
+                    <td>
+                                <span
+                                        class="badge"
+                                        th:text="${v.vehicleType}">
+                                </span>
+                    </td>
+
+                    <td th:text="${v.ownerName}"></td>
+
+                    <td>
+                        <div class="action-links">
+
+                            <a
+                                    class="action-link"
+                                    th:href="@{/vehicles/edit(vehicleId=${v.vehicleId})}">
+                                Edit
+                            </a>
+
+                            <form
+                                    class="inline-form"
+                                    th:action="@{/vehicles/delete}"
+                                    method="post">
+
+                                <input
+                                        type="hidden"
+                                        name="vehicleId"
+                                        th:value="${v.vehicleId}">
+
+                                <button
+                                        class="action-link"
+                                        style="border:0;background:none;color:#c2414d;cursor:pointer"
+                                        onclick="return confirm('Delete this vehicle?')">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(vehicles)}">
+                    <td colspan="5" class="empty">
+                        No vehicles registered yet.
+                    </td>
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+    <script th:src="@{/js/script.js}"></script>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+
+</main>
 
 </body>
 </html>
