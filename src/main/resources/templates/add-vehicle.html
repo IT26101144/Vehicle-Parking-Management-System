@@ -1,10 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Parkwise | Vehicle Parking Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
+<div th:replace="~{fragments :: sidebar('vehicles')}"></div>
+<div th:replace="~{fragments :: topbar}"></div>
+
+<main class="main">
+
+    <!-- Page heading -->
+    <div class="page-head">
+
+        <div>
+            <div class="eyebrow-blue">VEHICLE DIRECTORY</div>
+
+            <h1>Add vehicle</h1>
+
+            <p>Register a vehicle in the system.</p>
+        </div>
+
+        <a class="btn secondary" th:href="@{/vehicles}">
+            ← Back
+        </a>
+
+    </div>
+
+    <!-- Add vehicle form -->
+    <div class="form-card">
+
+        <div
+                th:if="${error}"
+                class="alert"
+                th:text="${error}">
+        </div>
+
+        <form
+                th:action="@{/vehicles/add}"
+                th:object="${vehicle}"
+                method="post">
+
+            <div class="form-grid">
+
+                <div class="field">
+
+                    <label>Vehicle ID *</label>
+
+                    <input
+                            th:field="*{vehicleId}"
+                            required
+                            placeholder="e.g. VEH001">
+
+                </div>
+
+                <div class="field">
+
+                    <label>Vehicle number *</label>
+
+                    <input
+                            th:field="*{vehicleNumber}"
+                            required
+                            placeholder="e.g. ABC-1234">
+
+                </div>
+
+                <div class="field">
+
+                    <label>Vehicle type *</label>
+
+                    <select
+                            th:field="*{vehicleType}"
+                            required>
+
+                        <option value="">Choose type</option>
+                        <option value="Car">Car</option>
+                        <option value="Van">Van</option>
+                        <option value="Motorbike">Motorbike</option>
+                        <option value="Other">Other</option>
+
+                    </select>
+
+                </div>
+
+                <div class="field">
+
+                    <label>Owner name *</label>
+
+                    <input
+                            th:field="*{ownerName}"
+                            required
+                            placeholder="Full name">
+
+                </div>
+
+            </div>
+
+            <!-- Form actions -->
+            <div class="form-actions">
+
+                <button class="btn" type="submit">
+                    Save vehicle
+                </button>
+
+                <a class="btn secondary" th:href="@{/vehicles}">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="footer-note">
+        Parkwise Parking Management · File-based academic project
+    </div>
+
+</main>
 
 </body>
 </html>
